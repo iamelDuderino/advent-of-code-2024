@@ -152,7 +152,7 @@ func (x *aocDay1) part1() {
 	}
 
 	// solution() solves for total distance
-	fmt.Println("Day 1, Part 1 Solution:", solution())
+	fmt.Println("Part 1 Solution:", solution())
 }
 
 func (x *aocDay1) part2() {
@@ -204,5 +204,5 @@ func (x *aocDay1) part2() {
 	}
 
 	// solution() solves for total similarity score
-	fmt.Println("Day 1, Part 2 Solution:", solution())
+	fmt.Println("Part 2 Solution:", solution())
 }

@@ -158,7 +158,7 @@ func (x *aocDay5) part1() {
 		}
 	}
 
-	fmt.Println("Day 5, Part 1 Solution:", answer)
+	fmt.Println("Part 1 Solution:", answer)
 }
 
 func (x *aocDay5) part2() {
@@ -175,5 +175,5 @@ func (x *aocDay5) part2() {
 		answer += u.getMedian()
 	}
 
-	fmt.Println("Day 5, Part 2 Solution:", answer)
+	fmt.Println("Part 2 Solution:", answer)
 }

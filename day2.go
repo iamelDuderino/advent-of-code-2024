@@ -110,7 +110,7 @@ func (x *aocDay2) part1() {
 			numSafeReports += 1
 		}
 	}
-	fmt.Println("Day 2, Part 1 Solution:", numSafeReports)
+	fmt.Println("Part 1 Solution:", numSafeReports)
 }
 
 func (x *aocDay2) part2() {
@@ -155,7 +155,7 @@ func (x *aocDay2) part2() {
 
 	}
 
-	fmt.Println("Day 2, Part 2 Solution:", trueNumSafeReports)
+	fmt.Println("Part 2 Solution:", trueNumSafeReports)
 }
 
 func (x *aocDay2) tolerable(increasing bool, level day2reportLevel, faultyIndex int) bool {

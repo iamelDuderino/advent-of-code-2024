@@ -67,7 +67,7 @@ func (x *aocDay3) part1() {
 
 	}
 
-	fmt.Println("Day 3, Part 1 Solution:", answer)
+	fmt.Println("Part 1 Solution:", answer)
 }
 
 func (x *aocDay3) part2() {
@@ -95,5 +95,5 @@ func (x *aocDay3) part2() {
 		answer += x * y
 	}
 
-	fmt.Println("Day 3, Part 2 Solution:", answer)
+	fmt.Println("Part 2 Solution:", answer)
 }
