@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sync"
 )
 
 var (
@@ -20,6 +21,7 @@ var (
 		},
 		p1guardMap: new(day6guardMap),
 		p2guardMap: new(day6guardMap),
+		wg:         new(sync.WaitGroup),
 	}
 )
 
@@ -36,12 +38,14 @@ type aocDay6 struct {
 	p2guard    *day6guard
 	p1guardMap *day6guardMap
 	p2guardMap *day6guardMap
+	wg         *sync.WaitGroup
 }
 
 type day6guard struct {
 	movingUp, movingDown, movingRight, movingLeft bool
 	x, y                                          int
 	patrolComplete                                bool
+	inLoop                                        bool
 }
 
 func (x *day6guard) turn() {
@@ -79,22 +83,121 @@ func (x *day6guard) move(onMap *day6guardMap) {
 		xx = x.x - 1
 		yy = x.y
 	}
-	if onMap.getCoord(xx, yy) != nil && onMap.getCoord(xx, yy).obstructed {
+	coords := onMap.getCoord(xx, yy)
+	if coords != nil && onMap.getCoord(xx, yy).obstructed {
+		switch {
+		case x.movingUp:
+			if coords.touchedB {
+				x.inLoop = true
+			}
+			coords.touchedB = true
+		case x.movingRight:
+			if coords.touchedL {
+				x.inLoop = true
+			}
+			coords.touchedL = true
+		case x.movingLeft:
+			if coords.touchedR {
+				x.inLoop = true
+			}
+			coords.touchedR = true
+		case x.movingDown:
+			if coords.touchedU {
+				x.inLoop = true
+			}
+			coords.touchedU = true
+		}
 		x.turn()
 		return
 	}
-	if xx >= onMap.width || yy >= onMap.height {
+	if xx >= onMap.width || yy >= onMap.height || xx < 0 || yy < 0 {
 		x.patrolComplete = true
 		return
 	}
 	x.x = xx
 	x.y = yy
-	onMap.getCoord(xx, yy).patrolled = true
+	coords.patrolled = true
+}
+
+// wouldLoop takes the guards intended travel position and makes it an obstruction, if not already,
+// in an attempt to lock the guard in an infinite loop
+func (x *day6guard) wouldLoop(xx, yy int) {
+
+	coords := day6.p2guardMap.getCoord(xx, yy)
+	if coords == nil {
+		return
+	}
+	if coords.testedForLoop {
+		return
+	}
+
+	fakeGuard := &day6guard{
+		movingUp:       x.movingUp,
+		movingDown:     x.movingDown,
+		movingRight:    x.movingRight,
+		movingLeft:     x.movingLeft,
+		x:              x.x,
+		y:              x.y,
+		patrolComplete: x.patrolComplete,
+	}
+
+	if fakeGuard.patrolComplete {
+		return
+	}
+
+	fakeMap := day6.p2guardMap.copy()
+
+	fakeCoords := fakeMap.getCoord(xx, yy)
+	if fakeCoords == nil {
+		return
+	}
+	if fakeCoords.obstructed {
+		return
+	}
+	if !fakeCoords.obstructed {
+		fakeCoords.obstructed = true
+	}
+
+	var (
+		n   int = 0
+		max int = 999999999
+	)
+	coords.testedForLoop = true
+	for !fakeGuard.patrolComplete {
+		if n == max {
+			coords.causesLoop = true
+			break
+		}
+		if fakeGuard.inLoop {
+			coords.causesLoop = true
+			break
+		}
+		fakeGuard.move(fakeMap)
+		n += 1
+	}
+
 }
 
 type day6guardMap struct {
 	pos           []*day6guardMapPos
 	width, height int
+}
+
+func (x *day6guardMap) copy() *day6guardMap {
+	m := new(day6guardMap)
+	m.width = x.width
+	m.height = x.height
+	for _, i := range x.pos {
+		newPos := &day6guardMapPos{
+			x:             i.x,
+			y:             i.y,
+			obstructed:    i.obstructed,
+			testedForLoop: i.testedForLoop,
+			causesLoop:    i.causesLoop,
+		}
+		m.pos = append(m.pos, newPos)
+	}
+	return m
 }
 
 func (x *day6guardMap) getCoord(xx, yy int) *day6guardMapPos {
@@ -116,11 +219,23 @@ func (x *day6guardMap) countPatrolled() int {
 	return n
 }
 
+func (x *day6guardMap) countLoopOpportunities() int {
+	var n int
+	for _, i := range x.pos {
+		if i.causesLoop {
+			n += 1
+		}
+	}
+	return n
+}
+
 type day6guardMapPos struct {
-	x, y          int
-	obstructed    bool
-	patrolled     bool
-	testedForLoop bool
+	x, y                                   int
+	obstructed                             bool
+	patrolled                              bool
+	testedForLoop                          bool
+	causesLoop                             bool
+	touchedL, touchedR, touchedU, touchedB bool
 }
 
 func (x *aocDay6) printBanner() {
@@ -184,9 +299,29 @@ func (x *aocDay6) part1() {
 }
 
 func (x *aocDay6) part2() {
-	var (
-		answer string
-	)
 
-	fmt.Println("Part 2 Solution:", answer)
+	for !x.p2guard.patrolComplete {
+
+		var xx, yy int
+		switch {
+		case x.p2guard.movingUp:
+			xx = x.p2guard.x
+			yy = x.p2guard.y - 1
+		case x.p2guard.movingRight:
+			xx = x.p2guard.x + 1
+			yy = x.p2guard.y
+		case x.p2guard.movingDown:
+			xx = x.p2guard.x
+			yy = x.p2guard.y + 1
+		case x.p2guard.movingLeft:
+			xx = x.p2guard.x - 1
+			yy = x.p2guard.y
+		}
+
+		x.p2guard.wouldLoop(xx, yy)
+		x.p2guard.move(day6.p2guardMap)
+	}
+
+	x.wg.Wait()
+	fmt.Println("Part 2 Solution:", x.p2guardMap.countLoopOpportunities())
 }
