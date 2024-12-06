@@ -53,9 +53,9 @@ func main() {
 	aoc.day5.part2()
 
 	// // Day 6
-	// aoc.day6.printBanner()
-	// aoc.day6.part1()
-	// aoc.day6.part2()
+	aoc.day6.printBanner()
+	aoc.day6.part1()
+	aoc.day6.part2()
 
 	// // Day7
 	// aoc.day7.printBanner()
