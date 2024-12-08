@@ -17,7 +17,16 @@ var (
 		data: dataFolder + "day7.txt",
 	}
 
-	day7rxp = regexp.MustCompile(`^(\d+)(?:\: )([\d\s]+$)`)
+	day7rxp    = regexp.MustCompile(`^(\d+)(?:\: )([\d\s]+$)`)
+	day7answer = func() int {
+		var n int
+		for _, i := range day7.problems {
+			if i.solveable {
+				n += i.answer
+			}
+		}
+		return n
+	}
 )
 
 type aocDay7 struct {
@@ -102,37 +111,28 @@ func (x *aocDay7) readFile() {
 	}
 }
 
-func (x *aocDay7) part1() {
-	var (
-		answer = func() int {
-			var n int
-			for _, i := range day7.problems {
-				if i.solveable {
-					n += i.answer
-				}
-			}
-			return n
-		}
-	)
-	x.readFile()
-
-	for _, i := range day7.problems {
+func (x *aocDay7) solvep1() {
+	for _, i := range x.problems {
 		s, _ := recursion(i.nums, []int{})
 		for _, sol := range s.solutions {
 			if i.answer == sol {
-
 				i.solveable = true
 			}
 		}
 	}
+}
 
-	fmt.Println("Part 1 Solution:", answer())
+func (x *aocDay7) solvep2() {
+
+}
+
+func (x *aocDay7) part1() {
+	x.readFile()
+	x.solvep1()
+	fmt.Println("Part 1 Solution:", day7answer())
 }
 
 func (x *aocDay7) part2() {
-	var (
-		answer string
-	)
-
-	fmt.Println("Part 2 Solution:", answer)
+	x.solvep2()
+	fmt.Println("Part 2 Solution:", day7answer())
 }
