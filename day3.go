@@ -42,7 +42,7 @@ func (x *aocDay3) parseMul(s string) (int, int, error) {
 	ys := sss[1]
 	ty, err := strconv.Atoi(ys)
 	if err != nil {
-		return 0, 0, nil
+		return 0, 0, err
 	}
 	return tx, ty, nil
 }
