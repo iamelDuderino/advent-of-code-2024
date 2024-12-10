@@ -71,6 +71,7 @@ func recursion(n []int, p []int) (solution, []int) {
 	return recursion(n[1:], p)
 }
 
+// big.Int probably not required with working solution
 func bigIntRecursion(n []*big.Int, p []*big.Int) ([]*big.Int, []*big.Int) {
 	if len(n) == 1 {
 		return n, p
