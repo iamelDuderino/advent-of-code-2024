@@ -78,13 +78,13 @@ func main() {
 
 	// Day 8
 	aoc.day8.printBanner()
-	aoc.day8.part1()
-	aoc.day8.part2()
+	// aoc.day8.part1()
+	// aoc.day8.part2()
 
 	// Day 9
-	// aoc.day9.printBanner()
-	// aoc.day9.part1()
-	// aoc.day9.part2()
+	aoc.day9.printBanner()
+	aoc.day9.part1()
+	aoc.day9.part2()
 
 	// Day 10
 	// aoc.day10.printBanner()

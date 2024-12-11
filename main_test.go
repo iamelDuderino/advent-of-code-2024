@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/big"
+	"strconv"
 	"testing"
 )
 
@@ -88,4 +89,64 @@ func TestFrequencies(t *testing.T) {
 	if a == b {
 		t.Fatal("should not be equal")
 	}
+}
+
+func TestDay9(t *testing.T) {
+
+	// Stage Test Case
+	var (
+		hdd       = "2333133121414131402"
+		allocated = "00...111...2...333.44.5555.6666.777.888899"
+		defragged = "0099811188827773336446555566.............."
+		checksum  = 1928
+	)
+
+	// Read "File"
+	for _, i := range hdd {
+		day9.mem = append(day9.mem, day9mem{
+			runes: []rune{i},
+		})
+	}
+
+	// Allocate
+	day9.allocate()
+	if day9.str != allocated {
+		t.Fatalf("%s != %s\n", day9.str, allocated)
+	}
+	t.Log("Allocated:", day9.str)
+
+	// Defreg
+	day9.defrag()
+	if day9.str != defragged {
+		t.Fatalf("%s != %s\n", day9.str, defragged)
+	}
+	t.Log("Defragged:", day9.str)
+
+	// Checksum
+	c := day9.checksum()
+	if c == 0 {
+		t.Fatal("checksum == 0")
+	}
+	if c != checksum {
+		t.Fatalf("%d != %d", c, checksum)
+	}
+	t.Log("Checksum:", c)
+}
+
+// day 9 curveball, a multi-digit number splits into different runes
+// the test case did not cover this as the max number was 9!
+func TestRunes(t *testing.T) {
+	var (
+		i = 10
+		r = []rune{}
+	)
+	r = append(r, []rune(fmt.Sprint(i))...)
+	for _, i := range r {
+		fmt.Println(string(i))
+	}
+	n, err := strconv.Atoi(string(r))
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(n)
 }
