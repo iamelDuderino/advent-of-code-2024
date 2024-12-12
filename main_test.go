@@ -195,9 +195,13 @@ func TestDay10(t *testing.T) {
 	var (
 		numTrailHeads = 9
 		score         = 36
+		p2score       = 81
 		trailheads    int
 	)
 	day10.readFile()
+
+	day10.p2 = true
+
 	for _, i := range day10.trails {
 		if i.isTrailHead() {
 			trailheads += 1
@@ -208,8 +212,11 @@ func TestDay10(t *testing.T) {
 		t.Fatalf("%d != %d", trailheads, numTrailHeads)
 	}
 	cscore := day10.calculateScore()
-	if cscore != score {
+	if !day10.p2 && cscore != score {
 		t.Fatalf("%d != %d", cscore, score)
 	}
-
+	if day10.p2 && cscore != p2score {
+		t.Fatalf("%d != %d", cscore, score)
+	}
+	fmt.Println("Score:", cscore)
 }
