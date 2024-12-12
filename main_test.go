@@ -91,7 +91,7 @@ func TestFrequencies(t *testing.T) {
 	}
 }
 
-func TestDay9(t *testing.T) {
+func TestDay9Part1(t *testing.T) {
 
 	// Stage Test Case
 	var (
@@ -103,7 +103,7 @@ func TestDay9(t *testing.T) {
 
 	// Read "File"
 	for _, i := range hdd {
-		day9.mem = append(day9.mem, day9mem{
+		day9.mem = append(day9.mem, &day9mem{
 			runes: []rune{i},
 		})
 	}
@@ -114,8 +114,9 @@ func TestDay9(t *testing.T) {
 		t.Fatalf("%s != %s\n", day9.str, allocated)
 	}
 	t.Log("Allocated:", day9.str)
+	day9.cache = day9.mem
 
-	// Defreg
+	// Defrag
 	day9.defrag()
 	if day9.str != defragged {
 		t.Fatalf("%s != %s\n", day9.str, defragged)
@@ -131,6 +132,45 @@ func TestDay9(t *testing.T) {
 		t.Fatalf("%d != %d", c, checksum)
 	}
 	t.Log("Checksum:", c)
+
+}
+
+func TestDay9Part2(t *testing.T) {
+
+	// Stage Test Case
+	var (
+		hdd       = "2333133121414131402"
+		allocated = "00...111...2...333.44.5555.6666.777.888899"
+		defragged = "00992111777.44.333....5555.6666.....8888.."
+		checksum  = 2858
+	)
+
+	// Read "File"
+	for _, i := range hdd {
+		day9.mem = append(day9.mem, &day9mem{
+			runes: []rune{i},
+		})
+	}
+
+	// Allocate
+	day9.allocate()
+	if day9.str != allocated {
+		t.Fatalf("%s != %s\n", day9.str, allocated)
+	}
+	t.Log("Allocated:", day9.str)
+	day9.cache = day9.mem
+
+	// Part 2
+	day9.p2 = true
+	day9.defrag()
+	if day9.str != defragged {
+		t.Fatalf("%s != %s", day9.str, defragged)
+	}
+	c := day9.checksum()
+	if c != checksum {
+		t.Fatalf("%d != %d", c, checksum)
+	}
+	t.Log(day9.str)
 }
 
 // day 9 curveball, a multi-digit number splits into different runes

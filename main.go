@@ -1,5 +1,7 @@
 package main
 
+import "flag"
+
 // Advent of Code 2024
 type adventOfCode struct {
 	day1  *aocDay1
@@ -41,74 +43,194 @@ const (
 
 func main() {
 
+	day := flag.Int("day", 0, "-day calls the desired day")
+	part := flag.Int("part", 1, "-part calls the desired part for the day")
+	flag.Parse()
+
+	switch *day {
+
 	// Day 1
-	aoc.day1.printBanner()
-	aoc.day1.part1()
-	aoc.day1.part2()
+	case 1:
+		aoc.day1.printBanner()
+		switch *part {
+		case 1:
+			aoc.day1.part1()
+		case 2:
+			aoc.day1.part2()
+		default:
+			aoc.day1.part1()
+			aoc.day1.part2()
+		}
 
 	// Day 2
-	aoc.day2.printBanner()
-	aoc.day2.part1()
-	aoc.day2.part2()
+	case 2:
+		aoc.day2.printBanner()
+		switch *part {
+		case 1:
+			aoc.day2.part1()
+		case 2:
+			aoc.day2.part2()
+		default:
+			aoc.day2.part1()
+			aoc.day2.part2()
+		}
 
 	// Day 3
-	aoc.day3.printBanner()
-	aoc.day3.part1()
-	aoc.day3.part2()
+	case 3:
+		aoc.day3.printBanner()
+		switch *part {
+		case 1:
+			aoc.day3.part1()
+		case 2:
+			aoc.day3.part2()
+		default:
+			aoc.day3.part1()
+			aoc.day3.part2()
+		}
 
 	// Day 4
-	aoc.day4.printBanner()
-	aoc.day4.part1()
-	aoc.day4.part2()
+	case 4:
+		aoc.day4.printBanner()
+		switch *part {
+		case 1:
+			aoc.day4.part1()
+		case 2:
+			aoc.day4.part2()
+		default:
+			aoc.day4.part1()
+			aoc.day4.part2()
+		}
 
 	// Day 5
-	aoc.day5.printBanner()
-	aoc.day5.part1()
-	aoc.day5.part2()
+	case 5:
+		aoc.day5.printBanner()
+		switch *part {
+		case 1:
+			aoc.day5.part1()
+		case 2:
+			aoc.day5.part2()
+		default:
+			aoc.day5.part1()
+			aoc.day5.part2()
+		}
 
 	// Day 6
-	aoc.day6.printBanner()
-	aoc.day6.part1()
-	// aoc.day6.part2() // commented because it takes the longest to complete so far
+	case 6:
+		aoc.day6.printBanner()
+		switch *part {
+		case 1:
+			aoc.day6.part1()
+		case 2:
+			aoc.day6.part2()
+		default:
+			aoc.day6.part1()
+			aoc.day6.part2()
+		}
 
 	// Day 7
-	aoc.day7.printBanner()
-	aoc.day7.part1()
-	// aoc.day7.part2()
+	case 7:
+		aoc.day7.printBanner()
+		switch *part {
+		case 1:
+			aoc.day7.part1()
+		case 2:
+			aoc.day7.part2()
+		default:
+			aoc.day7.part1()
+			aoc.day7.part2()
+		}
 
 	// Day 8
-	aoc.day8.printBanner()
-	// aoc.day8.part1()
-	// aoc.day8.part2()
+	case 8:
+		aoc.day8.printBanner()
+		switch *part {
+		case 1:
+			aoc.day8.part1()
+		case 2:
+			aoc.day8.part2()
+		default:
+			aoc.day8.part1()
+			aoc.day8.part2()
+		}
 
 	// Day 9
-	aoc.day9.printBanner()
-	aoc.day9.part1()
-	aoc.day9.part2()
+	case 9:
+		aoc.day9.printBanner()
+		switch *part {
+		case 1:
+			aoc.day9.part1()
+		case 2:
+			aoc.day9.part2()
+		default:
+			aoc.day9.part1()
+			aoc.day9.part2()
+		}
 
 	// Day 10
-	// aoc.day10.printBanner()
-	// aoc.day10.part1()
-	// aoc.day10.part2()
+	case 10:
+		aoc.day10.printBanner()
+		switch *part {
+		case 1:
+			aoc.day10.part1()
+		case 2:
+			aoc.day10.part2()
+		default:
+			aoc.day10.part1()
+			aoc.day10.part2()
+		}
 
 	// Day 11
-	// aoc.day11.printBanner()
-	// aoc.day11.part1()
-	// aoc.day11.part2()
+	case 11:
+		aoc.day11.printBanner()
+		switch *part {
+		case 1:
+			aoc.day11.part1()
+		case 2:
+			aoc.day11.part2()
+		default:
+			aoc.day11.part1()
+			aoc.day11.part2()
+		}
 
 	// Day 12
-	// aoc.day12.printBanner()
-	// aoc.day12.part1()
-	// aoc.day12.part2()
+	case 12:
+		aoc.day12.printBanner()
+		switch *part {
+		case 1:
+			aoc.day12.part1()
+		case 2:
+			aoc.day12.part2()
+		default:
+			aoc.day12.part1()
+			aoc.day12.part2()
+		}
 
 	// Day 13
-	// aoc.day13.printBanner()
-	// aoc.day13.part1()
-	// aoc.day13.part2()
+	case 13:
+		aoc.day13.printBanner()
+		switch *part {
+		case 1:
+			aoc.day13.part1()
+		case 2:
+			aoc.day13.part2()
+		default:
+			aoc.day13.part1()
+			aoc.day13.part2()
+		}
 
 	// Day 14
-	// aoc.day14.printBanner()
-	// aoc.day14.part1()
-	// aoc.day14.part2()
+	case 14:
+		aoc.day14.printBanner()
+		switch *part {
+		case 1:
+			aoc.day14.part1()
+		case 2:
+			aoc.day14.part2()
+		default:
+			aoc.day14.part1()
+			aoc.day14.part2()
+		}
+
+	}
 
 }
