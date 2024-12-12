@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/big"
-	"strconv"
 	"testing"
 )
 
@@ -177,18 +176,28 @@ func TestDay9Part2(t *testing.T) {
 // the test case did not cover this as the max number was 9!
 func TestRunes(t *testing.T) {
 	var (
-		i = 10
-		r = []rune{}
+		i = 253000
+		// r = []rune{}
 	)
-	r = append(r, []rune(fmt.Sprint(i))...)
-	for _, i := range r {
-		fmt.Println(string(i))
-	}
-	n, err := strconv.Atoi(string(r))
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Println(n)
+	// r = append(r, []rune(fmt.Sprint(i))...)
+	// for _, i := range r {
+	// 	fmt.Println(string(i))
+	// }
+	// n, err := strconv.Atoi(string(r))
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
+	// fmt.Println(n)
+
+	// sr := []rune(fmt.Sprint(i))
+	// if len(r)%2 == 0 {
+	// 	fmt.Println("sr is even")
+	// } else {
+	// 	fmt.Println(sr)
+	// }
+
+	fmt.Println(day11.opt2(i))
+
 }
 
 func TestDay10(t *testing.T) {
@@ -219,4 +228,12 @@ func TestDay10(t *testing.T) {
 		t.Fatalf("%d != %d", cscore, score)
 	}
 	fmt.Println("Score:", cscore)
+}
+
+func TestStuff(t *testing.T) {
+	var (
+		i = []int{1, 2, 3, 4, 5}
+	)
+	fmt.Println(i[:2]) // 1 2
+	fmt.Println(i[2:]) // 3, 4, 5
 }
