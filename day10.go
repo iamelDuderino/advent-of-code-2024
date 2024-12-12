@@ -34,6 +34,7 @@ type aocDay10 struct {
 	data          string
 	trails        []*day10trail
 	width, height int
+	p2            bool
 }
 
 func (x *aocDay10) get(xx, yy int) *day10trail {
@@ -68,7 +69,7 @@ func (x *day10trail) isTrailHead() bool {
 
 func (x *day10trail) ping(th *day10trail) {
 	if x.height == nine {
-		if !th.hasSeen(x) {
+		if !th.hasSeen(x) || day10.p2 {
 			// fmt.Printf("(%d,%d) found a trail ending @ (%d, %d)\n", th.x, th.y, x.x, x.y)
 			th.trailsFound = append(th.trailsFound, x)
 			th.score += 1
@@ -172,9 +173,12 @@ func (x *aocDay10) part1() {
 }
 
 func (x *aocDay10) part2() {
-	var (
-		answer string
-	)
-
-	fmt.Println("Part 2 Solution:", answer)
+	x.readFile()
+	x.p2 = true
+	for _, i := range x.trails {
+		if i.isTrailHead() {
+			i.ping(i)
+		}
+	}
+	fmt.Println("Part 2 Solution:", x.calculateScore())
 }
