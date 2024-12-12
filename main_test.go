@@ -190,3 +190,26 @@ func TestRunes(t *testing.T) {
 	}
 	fmt.Println(n)
 }
+
+func TestDay10(t *testing.T) {
+	var (
+		numTrailHeads = 9
+		score         = 36
+		trailheads    int
+	)
+	day10.readFile()
+	for _, i := range day10.trails {
+		if i.isTrailHead() {
+			trailheads += 1
+			i.ping(i)
+		}
+	}
+	if trailheads != numTrailHeads {
+		t.Fatalf("%d != %d", trailheads, numTrailHeads)
+	}
+	cscore := day10.calculateScore()
+	if cscore != score {
+		t.Fatalf("%d != %d", cscore, score)
+	}
+
+}

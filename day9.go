@@ -19,9 +19,8 @@ var (
 )
 
 type day9mem struct {
-	runes    []rune
-	id       int
-	hasmoved bool
+	runes []rune
+	id    int
 }
 
 func (x *day9mem) display() string {
