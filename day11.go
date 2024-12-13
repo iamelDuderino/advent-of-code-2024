@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 )
 
 const (
@@ -20,7 +22,6 @@ var (
 -   DAY 11   -
 -------------`,
 		data: dataFolder + "day11.txt",
-		// plutonianPebbles: make([]int, 1000000),
 	}
 )
 
@@ -30,17 +31,12 @@ type aocDay11 struct {
 	banner           string
 	data             string
 	plutonianPebbles []int
-	cache            []int
+	cache1, cache2   []int
+	wg               *sync.WaitGroup
 }
 
 func (x *aocDay11) blink() {
-	type insertion struct {
-		idx int
-		n   int
-	}
-	var (
-		insertions = []*insertion{}
-	)
+	var insertions = make(map[int]int)
 	for idx, i := range x.plutonianPebbles {
 		switch x.consider(i) {
 		case d11opt1:
@@ -51,27 +47,20 @@ func (x *aocDay11) blink() {
 			if len(x.plutonianPebbles)-1 == idx {
 				x.plutonianPebbles = append(x.plutonianPebbles, i2)
 			} else {
-				insertions = append(insertions, &insertion{
-					idx: idx + 1,
-					n:   i2,
-				})
+				insertions[idx+1] = i2
 			}
 		case d11opt3:
 			x.plutonianPebbles[idx] = x.opt3(i)
 		}
 	}
-	for _, i := range insertions {
-		x.cache = make([]int, len(x.plutonianPebbles[i.idx:]))
-		copy(x.cache, x.plutonianPebbles[i.idx:])
-		x.plutonianPebbles = x.plutonianPebbles[:i.idx]
-		x.plutonianPebbles = append(x.plutonianPebbles, i.n)
-		x.plutonianPebbles = append(x.plutonianPebbles, x.cache...)
-		for _, ii := range insertions {
-			if ii.idx == i.idx {
-				continue
-			}
-			ii.idx += 1
-		}
+	var iter int
+	for idx, n := range insertions {
+		x.cache2 = make([]int, len(x.plutonianPebbles[idx+iter:]))
+		copy(x.cache2, x.plutonianPebbles[idx+iter:])
+		x.plutonianPebbles = x.plutonianPebbles[:idx+iter]
+		x.plutonianPebbles = append(x.plutonianPebbles, n)
+		x.plutonianPebbles = append(x.plutonianPebbles, x.cache2...)
+		iter += 1
 	}
 }
 
@@ -141,10 +130,9 @@ func (x *aocDay11) part1() {
 	x.readFile()
 	numTimesToBlink := 25
 	for n := 1; n <= numTimesToBlink; n++ {
-		fmt.Printf(" ~ BLINK %d ~  %d\n", n, len(x.plutonianPebbles))
-		// fmt.Println(x.plutonianPebbles)
+		t := time.Now()
 		x.blink()
-		// fmt.Println(x.plutonianPebbles)
+		fmt.Printf(" ~ BLINK %d ~ %ss ~ %d ~\n", n, fmt.Sprintf("%.2f", time.Since(t).Seconds()), len(x.plutonianPebbles))
 	}
 	// fmt.Println(x.plutonianPebbles)
 	fmt.Println("Part 1 Solution:", len(x.plutonianPebbles))
@@ -154,8 +142,9 @@ func (x *aocDay11) part2() {
 	x.readFile()
 	numTimesToBlink := 75
 	for n := 1; n <= numTimesToBlink; n++ {
-		fmt.Printf(" ~ BLINK %d | %d ~\n", n, len(x.plutonianPebbles))
+		t := time.Now()
 		x.blink()
+		fmt.Printf(" ~ BLINK %d ~ %ss ~ %d ~\n", n, fmt.Sprintf("%.2f", time.Since(t).Seconds()), len(x.plutonianPebbles))
 	}
 	fmt.Println("Part 2 Solution:", len(x.plutonianPebbles))
 }
