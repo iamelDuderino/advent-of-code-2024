@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -31,8 +30,7 @@ type aocDay11 struct {
 	banner           string
 	data             string
 	plutonianPebbles []int
-	cache1, cache2   []int
-	wg               *sync.WaitGroup
+	cache            []int
 }
 
 func (x *aocDay11) blink() {
@@ -55,11 +53,11 @@ func (x *aocDay11) blink() {
 	}
 	var iter int
 	for idx, n := range insertions {
-		x.cache2 = make([]int, len(x.plutonianPebbles[idx+iter:]))
-		copy(x.cache2, x.plutonianPebbles[idx+iter:])
+		x.cache = make([]int, len(x.plutonianPebbles[idx+iter:]))
+		copy(x.cache, x.plutonianPebbles[idx+iter:])
 		x.plutonianPebbles = x.plutonianPebbles[:idx+iter]
 		x.plutonianPebbles = append(x.plutonianPebbles, n)
-		x.plutonianPebbles = append(x.plutonianPebbles, x.cache2...)
+		x.plutonianPebbles = append(x.plutonianPebbles, x.cache...)
 		iter += 1
 	}
 }
