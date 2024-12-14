@@ -252,7 +252,7 @@ func TestDay12(t *testing.T) {
 		i.calculatePerimeter()
 		fmt.Printf("Region %d has %d plants of %s seed -- Area: %d -- Perimeter: %d -- Cost: %d\n", idx+1, len(i.plants), i.seed, i.area, i.perimeter, i.cost)
 	}
-	c := day12.garden.calculateCost()
+	c := day12.garden.calculateCost("area")
 	if c != totalPrice {
 		t.Fatalf("%d != %d", c, totalPrice)
 	}
