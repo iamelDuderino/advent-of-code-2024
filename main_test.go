@@ -228,3 +228,32 @@ func TestDay10(t *testing.T) {
 	}
 	fmt.Println("Score:", cscore)
 }
+
+func TestDay12(t *testing.T) {
+	var (
+		totalPrice = 1930
+	)
+	day12.readFile()
+	for _, i := range day12.garden.plants {
+		if !i.isRegioned {
+			p := i.ping(i.seed, []*day12plant{})
+			r := &day12region{
+				seed:   i.seed,
+				plants: p,
+			}
+			r.calculateArea()
+			r.calculatePerimeter()
+			r.calculateCost()
+			day12.garden.regions = append(day12.garden.regions, r)
+		}
+	}
+	for idx, i := range day12.garden.regions {
+		i.calculateArea()
+		i.calculatePerimeter()
+		fmt.Printf("Region %d has %d plants of %s seed -- Area: %d -- Perimeter: %d -- Cost: %d\n", idx+1, len(i.plants), i.seed, i.area, i.perimeter, i.cost)
+	}
+	c := day12.garden.calculateCost()
+	if c != totalPrice {
+		t.Fatalf("%d != %d", c, totalPrice)
+	}
+}
