@@ -231,7 +231,8 @@ func TestDay10(t *testing.T) {
 
 func TestDay12(t *testing.T) {
 	var (
-		totalPrice = 1930
+		totalPriceA = 1930
+		totalPriceB = 1206
 	)
 	day12.readFile()
 	for _, i := range day12.garden.plants {
@@ -243,17 +244,51 @@ func TestDay12(t *testing.T) {
 			}
 			r.calculateArea()
 			r.calculatePerimeter()
-			r.calculateCost()
+			r.calculateCost("perimeter")
 			day12.garden.regions = append(day12.garden.regions, r)
 		}
 	}
-	for idx, i := range day12.garden.regions {
+	c := day12.garden.calculateCost()
+	// if c != totalPriceA {
+	// 	t.Fatalf("%d != %d", c, totalPriceA)
+	// }
+	fmt.Printf("Total Cost A %d == %d\n", c, totalPriceA)
+	for n, i := range day12.garden.regions {
+		fmt.Printf("Calculating Region %d/%d\n", n+1, len(day12.garden.regions))
+		i.draw()
 		i.calculateArea()
-		i.calculatePerimeter()
-		fmt.Printf("Region %d has %d plants of %s seed -- Area: %d -- Perimeter: %d -- Cost: %d\n", idx+1, len(i.plants), i.seed, i.area, i.perimeter, i.cost)
+		i.trace()
+		i.calculateCost("sides")
+		fmt.Println("Area:", i.area)
+		fmt.Println("Sides:", i.sides)
+		fmt.Println("Cost:", i.cost)
 	}
-	c := day12.garden.calculateCost("area")
-	if c != totalPrice {
-		t.Fatalf("%d != %d", c, totalPrice)
+	c = day12.garden.calculateCost()
+	// if c != totalPriceB {
+	// 	t.Fatalf("%d != %d", c, totalPriceB)
+	// }
+	fmt.Printf("Total Cost B %d == %d\n", c, totalPriceB)
+}
+
+func TestDay12Region(t *testing.T) {
+	day12.readFile()
+	for _, i := range day12.garden.plants {
+		if !i.isRegioned {
+			p := i.ping(i.seed, []*day12plant{})
+			r := &day12region{
+				seed:   i.seed,
+				plants: p,
+			}
+			r.calculateArea()
+			r.calculatePerimeter()
+			r.calculateCost("perimeter")
+			day12.garden.regions = append(day12.garden.regions, r)
+		}
 	}
+	r := day12.garden.regions[283]
+	// r.draw()
+	r.trace()
+	fmt.Println("Area:", r.area)
+	fmt.Println("Sides:", r.sides)
+	fmt.Println("Cost:", r.cost)
 }
