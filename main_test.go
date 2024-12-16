@@ -249,9 +249,9 @@ func TestDay12(t *testing.T) {
 		}
 	}
 	c := day12.garden.calculateCost()
-	// if c != totalPriceA {
-	// 	t.Fatalf("%d != %d", c, totalPriceA)
-	// }
+	if c != totalPriceA {
+		t.Fatalf("%d != %d", c, totalPriceA)
+	}
 	fmt.Printf("Total Cost A %d == %d\n", c, totalPriceA)
 	for n, i := range day12.garden.regions {
 		fmt.Printf("Calculating Region %d/%d\n", n+1, len(day12.garden.regions))
@@ -264,9 +264,9 @@ func TestDay12(t *testing.T) {
 		fmt.Println("Cost:", i.cost)
 	}
 	c = day12.garden.calculateCost()
-	// if c != totalPriceB {
-	// 	t.Fatalf("%d != %d", c, totalPriceB)
-	// }
+	if c != totalPriceB {
+		t.Fatalf("%d != %d", c, totalPriceB)
+	}
 	fmt.Printf("Total Cost B %d == %d\n", c, totalPriceB)
 }
 
@@ -286,7 +286,7 @@ func TestDay12Region(t *testing.T) {
 		}
 	}
 	r := day12.garden.regions[283]
-	// r.draw()
+	r.draw()
 	r.trace()
 	fmt.Println("Area:", r.area)
 	fmt.Println("Sides:", r.sides)

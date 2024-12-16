@@ -138,13 +138,6 @@ func (x *day12region) checkRightAngle(p *day12plant, dir string) bool {
 }
 
 func (x *day12region) isDeadEnd(p *day12plant, dir string) bool {
-
-	// hard-coded definitive NON dead-end edge cases causing issues
-	// Region 283:
-	if p.x == 1 && p.y == 72 {
-		return false
-	}
-
 	// must have at least 3 nil sides containing no members
 	var n int
 	up := x.get(p.x, p.y-1)
@@ -177,7 +170,6 @@ func (x *day12region) isDeadEnd(p *day12plant, dir string) bool {
 		if upright != nil {
 			nn += 1
 		}
-
 	case "down":
 		if downleft != nil {
 			nn += 1
@@ -185,7 +177,6 @@ func (x *day12region) isDeadEnd(p *day12plant, dir string) bool {
 		if downright != nil {
 			nn += 1
 		}
-
 	case "left":
 		if upleft != nil {
 			nn += 1
@@ -193,7 +184,6 @@ func (x *day12region) isDeadEnd(p *day12plant, dir string) bool {
 		if downleft != nil {
 			nn += 1
 		}
-
 	case "right":
 		if upright != nil {
 			nn += 1
@@ -201,12 +191,41 @@ func (x *day12region) isDeadEnd(p *day12plant, dir string) bool {
 		if downright != nil {
 			nn += 1
 		}
-
 	}
-	// if n == 3 && nn == 0 {
-	// 	fmt.Println("DEADEND!", n, nn)
-	// }
-	return (n == 3 && nn == 0)
+	// do a final check to determine if there are any plants to the sides of the intended
+	// direction or now in front of the recently turned tracing angles intended direction
+	var nnn int
+	switch dir {
+	case "up", "down":
+		if dir == "up" {
+			if x.get(p.x, p.y-1) != nil {
+				nnn += 1
+			}
+		}
+		if dir == "down" {
+			if x.get(p.x, p.y+1) != nil {
+				nnn += 1
+			}
+		}
+		if x.get(p.x-1, p.y) != nil || x.get(p.x+1, p.y) != nil {
+			nnn += 1
+		}
+	case "left", "right":
+		if dir == "left" {
+			if x.get(p.x-1, p.y) != nil {
+				nnn += 1
+			}
+		}
+		if dir == "right" {
+			if x.get(p.x+1, p.y+1) != nil {
+				nnn += 1
+			}
+		}
+		if x.get(p.x, p.y-1) != nil || x.get(p.x, p.y+1) != nil {
+			nnn += 1
+		}
+	}
+	return (n == 3 && nn == 0 && nnn == 0)
 }
 
 func (x *day12region) get(xx, yy int) *day12plant {
@@ -544,9 +563,10 @@ func (x *day12region) trace() {
 		}
 		iters += 1
 		x.edges = append(x.edges, currentPlant)
-		if iters > 10000 {
+		if iters > 200 {
 			x.draw()
-			panic("ruh roh..")
+			msg := fmt.Sprintf("Region %d is looping @ (%d,%d)", x.id, currentPlant.x, currentPlant.y)
+			panic(msg)
 		}
 	}
 	x.fillInsides()
@@ -687,8 +707,9 @@ func (x *day12plant) downright() *day12plant {
 }
 
 // fenceCost = regionCostA + regionCostB + etc
-// part1: regionCost = perimeter * area
-// part2: regionCost = area *
+//
+//	part1: regionCost = perimeter * area
+//	part2: regionCost = # of sides * area
 func (x *day12garden) calculateCost() int {
 	var n int
 	for _, i := range x.regions {
