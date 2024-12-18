@@ -257,7 +257,7 @@ func TestDay12(t *testing.T) {
 		fmt.Printf("Calculating Region %d/%d\n", n+1, len(day12.garden.regions))
 		i.draw()
 		i.calculateArea()
-		i.trace()
+		i.calculateSides()
 		i.calculateCost("sides")
 		fmt.Println("Area:", i.area)
 		fmt.Println("Sides:", i.sides)
@@ -286,8 +286,8 @@ func TestDay12Region(t *testing.T) {
 		}
 	}
 	r := day12.garden.regions[283]
-	r.draw()
-	r.trace()
+	// r.draw()
+	r.calculateSides()
 	fmt.Println("Area:", r.area)
 	fmt.Println("Sides:", r.sides)
 	fmt.Println("Cost:", r.cost)
