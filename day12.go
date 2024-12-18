@@ -525,10 +525,10 @@ func (x *aocDay12) part2() {
 		i.calculateSides()
 		i.calculateCost("sides")
 		//
-		i.draw()
-		fmt.Println("Area:", i.area)
-		fmt.Println("Sides:", i.sides)
-		fmt.Println("Cost:", i.cost)
+		// i.draw()
+		// fmt.Println("Area:", i.area)
+		// fmt.Println("Sides:", i.sides)
+		// fmt.Println("Cost:", i.cost)
 		// break
 	}
 	fmt.Println("Part 2 Solution:", day12.garden.calculateCost())
